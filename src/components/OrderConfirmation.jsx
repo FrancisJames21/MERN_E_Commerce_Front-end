@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import AppContext from "../context/AppContext";
-import { userOrder } from "../../../API/Controllers/Payment";
+// import { userOrder } from "../../../API/Controllers/Payment";
 import ShowOrderProduct from "./ShowOrderProduct";
 
 const OrderConfirmation = () => {
