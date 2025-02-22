@@ -10,19 +10,32 @@ const Register = () => {
     email: "",
     password: ""
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState("");
 
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    if (name === "password") {
+      checkPasswordStrength(value);
+    }
+  };
+
+  const checkPasswordStrength = (password) => {
+    if (password.length < 6) {
+      setPasswordStrength("Weak ❌");
+    } else if (password.match(/[A-Z]/) && password.match(/\d/) && password.match(/[!@#$%^&*]/)) {
+      setPasswordStrength("Strong ✅");
+    } else {
+      setPasswordStrength("Medium ⚠️");
+    }
   };
 
   const { name, email, password } = formData;
-
   const submitHandler = async (e) => {
     e.preventDefault();
-    
     const result = await register(name, email, password);
-    
     if (result.success) {
       navigate('/login');
     }
@@ -56,14 +69,24 @@ const Register = () => {
         </div>
         <div className="mb-3">
           <label htmlFor="password" className="form-label">Password</label>
-          <input
-            name="password"
-            value={formData.password}
-            onChange={onChangeHandler}
-            type="password"
-            className="form-control"
-            id="password"
-          />
+          <div className="input-group">
+            <input
+              name="password"
+              value={formData.password}
+              onChange={onChangeHandler}
+              type={showPassword ? "text" : "password"}
+              className="form-control"
+              id="password"
+            />
+            <button
+              type="button"
+              className="btn btn-outline-secondary"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
+          </div>
+          <small className="text-muted">Password Strength: {passwordStrength}</small>
         </div>
         <div className="d-grid col-5 mx-auto">
           <button type="submit" className="btn btn-primary">Register</button>
